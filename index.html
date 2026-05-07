@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHADOW JOKER SMS BOMBER</title>
+    <style>
+        :root { --neon: #00f2ff; --bg: #05050a; --card: rgba(15, 15, 30, 0.8); }
+        body {
+            background: var(--bg); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0;
+            background-image: radial-gradient(circle at center, #101025 0%, #05050a 100%);
+        }
+        .container { width: 90%; max-width: 500px; margin-top: 50px; text-align: center; }
+        .header h1 {
+            color: var(--neon); font-size: 2.5rem; text-shadow: 0 0 15px var(--neon);
+            margin-bottom: 10px; font-weight: 800;
+        }
+        .card {
+            background: var(--card); padding: 30px; border-radius: 20px;
+            border: 1px solid rgba(0, 242, 255, 0.2); backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        input {
+            width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333;
+            background: #000; color: var(--neon); font-size: 1.2rem; text-align: center;
+            outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
+        button {
+            width: 100%; margin-top: 20px; padding: 15px; border-radius: 10px; border: none;
+            background: var(--neon); color: #000; font-weight: bold; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        button:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--neon); }
+        button:disabled { background: #555; cursor: not-allowed; }
+        
+        .loader {
+            display: none; margin: 20px auto; width: 40px; height: 40px;
+            border: 4px solid #111; border-top: 4px solid var(--neon);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #result { margin-top: 20px; font-size: 1.1rem; }
+        .footer { margin-top: auto; padding: 20px; color: #555; font-size: 0.8rem; }
+        .credit { color: var(--neon); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>SHADOW JOKER</h1>
+        <p style="color: #888;">SMS BOMBER - SECURITY TESTER</p>
+    </div>
+
+    <div class="card">
+        <input type="text" id="phone" placeholder="Enter Phone (e.g. 017...)" maxlength="11">
+        <button id="btn" onclick="startBlast()">🚀 Launch Blast</button>
+        <div class="loader" id="loader"></div>
+        <div id="result"></div>
+    </div>
+</div>
+
+<div class="footer">
+    Developed for Educational Purposes Only <br>
+    <span class="credit">CREDIT: SHADOW JOKER</span> | COPYRIGHT: <span class="credit">CYBER TEAM HELP 2026</span>
+</div>
+
+<script>
+    async function startBlast() {
+        const phone = document.getElementById('phone').value;
+        const btn = document.getElementById('btn');
+        const resDiv = document.getElementById('result');
+        const loader = document.getElementById('loader');
+
+        if(phone.length < 11) return alert("Enter valid 11 digit number!");
+
+        btn.disabled = true;
+        loader.style.display = "block";
+        resDiv.innerHTML = "Blasting in progress...";
+
+        try {
+            const response = await fetch(`/api/index?phone=${phone}`);
+            const data = await response.json();
+            
+            resDiv.innerHTML = `
+                <span style="color:#00ff00">✅ Success: ${data.successful}</span><br>
+                <span style="color:#ff0000">❌ Failed: ${data.total - data.successful}</span><br>
+                <small>Time: ${data.time_seconds}s</small>
+            `;
+        } catch (e) {
+            resDiv.innerHTML = `<span style="color:red">Error: API Not Responding</span>`;
+        } finally {
+            btn.disabled = false;
+            loader.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
